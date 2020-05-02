@@ -1,0 +1,33 @@
+[project]
+title = Defold-Websocket
+version = 1.0.0
+dependencies = https://github.com/britzl/defold-luasocket/archive/0.11.zip,https://github.com/britzl/defold-luasec/archive/1.1.0.zip
+
+[bootstrap]
+main_collection = /examples/websocket.collectionc
+
+[input]
+game_binding = /input/game.input_bindingc
+
+[display]
+width = 640
+height = 1136
+
+[physics]
+scale = 0.02
+
+[script]
+shared_state = 1
+
+[library]
+include_dirs = websocket
+
+[android]
+package = com.defold.websocket
+
+[osx]
+bundle_identifier = com.defold.websocket
+
+[ios]
+bundle_identifier = com.defold.websocket
+
