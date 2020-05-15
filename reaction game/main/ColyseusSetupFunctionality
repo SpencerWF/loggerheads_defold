@@ -1,0 +1,39 @@
+# Reaction Game Layout
+
+There are three main files to the Reaction Game Server.  The game main.script, the index.ts and the reactiongame.ts.  These files each have a specific purpose:
+
+ - main.script - controls the game flow and communication with the reaction game room file (reactiongame.ts).
+
+ - index.ts - sets up the server (on a particular port), and the game room (reactiongame.ts).
+
+ - reactiongame.ts - controls the communication between the game client and the server.
+
+## main.script setup and functions
+
+### necessary variables
+
+-- variable to create the colyseus client, is necessary
+local Colyseus = require "colyseus.client"
+
+-- server variables to find the server to communicate on
+local server_address = "localhost"
+local server_port = "3553"
+
+-- local variables to communciate with the server
+local client
+local room
+
+-- within your update function include 'client:loop()' to ensure that the shared variables get updated.
+function update(self, dt)
+	client:loop()
+end
+
+## index.ts setup and functions
+
+
+
+## reactiongame.ts setup and functions
+
+
+
+
