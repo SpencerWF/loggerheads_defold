@@ -42,7 +42,7 @@ embedded_instances {
   "  }\n"
   "}\n"
   "embedded_components {\n"
-  "  id: \"sprite\"\n"
+  "  id: \"Good\"\n"
   "  type: \"sprite\"\n"
   "  data: \"tile_set: \\\"/assets/Air Heads.atlas\\\"\\n"
   "default_animation: \\\"Airheads_Pump_Text_Large\\\"\\n"
@@ -82,7 +82,7 @@ embedded_instances {
 embedded_instances {
   id: "wait"
   data: "embedded_components {\n"
-  "  id: \"sprite\"\n"
+  "  id: \"Wait\"\n"
   "  type: \"sprite\"\n"
   "  data: \"tile_set: \\\"/assets/Air Heads.atlas\\\"\\n"
   "default_animation: \\\"Airheads_Wait_Text_Large\\\"\\n"
@@ -122,7 +122,7 @@ embedded_instances {
 embedded_instances {
   id: "bad"
   data: "embedded_components {\n"
-  "  id: \"Sprite\"\n"
+  "  id: \"Bad\"\n"
   "  type: \"sprite\"\n"
   "  data: \"tile_set: \\\"/assets/Air Heads.atlas\\\"\\n"
   "default_animation: \\\"Airheads_Danger_Text_Large\\\"\\n"
