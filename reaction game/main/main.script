@@ -91,7 +91,7 @@ function init(self)
 	badoldpos = go.get_position("bad")
 
 	msg.post("/bad#Bad", "disable")
-	msg.post("#Good", "disable")
+	msg.post("/good#Good", "disable")
 	msg.post("/wait#Wait", "disable")
 	
 end
@@ -143,9 +143,9 @@ function Setactives ()
 		goodisactive = true
 		badisactive = false
 		print("good is active")
-		msg.post("good#Sprite", "enable")
-		msg.post("wait#Sprite", "disable")
-		msg.post("bad#Sprite", "disable")
+		msg.post("/good#Good", "enable")
+		msg.post("/wait#Wait", "disable")
+		msg.post("/bad#Bad", "disable")
 		time_os = os.clock()
 	end
 
@@ -153,18 +153,18 @@ function Setactives ()
 		badisactive = true
 		goodisactive = false
 		print("bad is active")
-		msg.post("bad#Sprite", "enable")
-		msg.post("wait#Sprite", "disable")
-		msg.post("good#Sprite", "disable")
+		msg.post("/bad#Bad", "enable")
+		msg.post("/wait#Wait", "disable")
+		msg.post("/good#Good", "disable")
 	end
 
 	if pickactive == 0 then
 		badisactive = false
 		goodisactive = false
 		print("Neutral is active")
-		msg.post("wait#Sprite", "enable")
-		msg.post("good#Sprite", "disable")
-		msg.post("bad#Sprite", "disable")
+		msg.post("/wait#Wait", "enable")
+		msg.post("/good#Good", "disable")
+		msg.post("/bad#Bad", "disable")
 	end
 
 	-- time = 0
