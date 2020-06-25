@@ -86,9 +86,14 @@ function init(self)
 	end);
 	
 	msg.post("@render:", "use_fixed_fit_projection", { near = -1, far = 1 })
-	centerposition = go.get_position("center")
+	centerposition = go.get_position("wait")
 	goodoldpos = go.get_position("good")
 	badoldpos = go.get_position("bad")
+
+	msg.post("/bad#Sprite", "disable")
+	msg.post("/good#Sprite", "disable")
+	--msg.post("/wait#Sprite", "disable")
+	
 end
 
 function update(self, dt)
@@ -138,6 +143,7 @@ function Setactives ()
 		goodisactive = true
 		badisactive = false
 		print("good is active")
+		msg.post("good#Sprite", "enable")
 		time_os = os.clock()
 	end
 
@@ -145,28 +151,30 @@ function Setactives ()
 		badisactive = true
 		goodisactive = false
 		print("bad is active")
+		msg.post("bad#Sprite", "enable")
 	end
 
 	if pickactive == 0 then
 		badisactive = false
 		goodisactive = false
 		print("Neutral is active")
+		msg.post("wait#Sprite", "enable")
 	end
 
 	-- time = 0
 end
 
-function Setpositions()
-	if goodisactive == true then
-		go.set_position(centerposition,"good")
-		go.set_position(badoldpos,"bad")
-	else
-		go.set_position(goodoldpos,"good")
-	end
-	if badisactive == true then
-		go.set_position(centerposition,"bad")
-		go.set_position(goodoldpos,"good")
-	else
-		go.set_position(badoldpos,"bad")
-	end
-end
+--function Setpositions()
+--	if goodisactive == true then
+--		go.set_position(centerposition,"good")
+--		go.set_position(badoldpos,"bad")
+--	else
+--		go.set_position(goodoldpos,"good")
+--	end
+--	if badisactive == true then
+--		go.set_position(centerposition,"bad")
+--		go.set_position(goodoldpos,"good")
+--	else
+--		go.set_position(badoldpos,"bad")
+--	end
+--end
