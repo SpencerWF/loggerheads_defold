@@ -18,6 +18,22 @@ images {
   image: "/assets/Airheads assets/Airheads_Wait_Text_Large.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
+images {
+  image: "/assets/Airheads assets/score_indicator_1.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/assets/Airheads assets/score_indicator_2.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/assets/Airheads assets/score_indicator_3.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/assets/Airheads assets/score_indicator_4.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
 animations {
   id: "First"
   images {
@@ -32,7 +48,7 @@ animations {
     image: "/assets/Airheads assets/Airheads_Balloon_3.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
-  playback: PLAYBACK_LOOP_FORWARD
+  playback: PLAYBACK_ONCE_FORWARD
   fps: 60
   flip_horizontal: 0
   flip_vertical: 0
@@ -51,7 +67,7 @@ animations {
     image: "/assets/Airheads assets/Airheads_Balloon_6.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
-  playback: PLAYBACK_LOOP_FORWARD
+  playback: PLAYBACK_ONCE_FORWARD
   fps: 60
   flip_horizontal: 0
   flip_vertical: 0
@@ -74,7 +90,7 @@ animations {
     image: "/assets/Airheads assets/Airheads_Balloon_10.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
-  playback: PLAYBACK_LOOP_FORWARD
+  playback: PLAYBACK_ONCE_FORWARD
   fps: 60
   flip_horizontal: 0
   flip_vertical: 0

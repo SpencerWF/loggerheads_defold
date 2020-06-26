@@ -134,8 +134,39 @@ end
 
 function Plusscore()
 	-- add real score
-	score = score + 1
+	if	goodisactive == true then
+		
+		score = score + 1
+
+	
 	print(score)
+
+	if score == 1 then
+
+		msg.post("/Scoore#score", "play_animation", {id = hash("score_indicator_2")})
+		
+	elseif score == 2 then
+
+		msg.post("/Scoore#score", "play_animation", {id = hash("score_indicator_3")})
+		
+	elseif score > 2 then
+
+		msg.post("/Scoore#score", "play_animation", {id = hash("score_indicator_4")})
+		
+	else
+	
+		msg.post("/Scoore#score", "play_animation", {id = hash("score_indicator_1")})
+		
+	end
+
+end
+
+		
+
+
+
+		
+	
 end
 
 function Setactives ()
