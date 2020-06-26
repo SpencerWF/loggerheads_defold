@@ -134,7 +134,7 @@ end
 
 function Plusscore()
 	-- add real score
-	if	goodisactive == true then
+	--if	goodisactive == true then
 		
 		score = score + 1
 
@@ -144,14 +144,17 @@ function Plusscore()
 	if score == 1 then
 
 		msg.post("/Scoore#score", "play_animation", {id = hash("score_indicator_2")})
+		msg.post("/Air-head#bloon", "play_animation", {id = hash("First")})
 		
 	elseif score == 2 then
 
 		msg.post("/Scoore#score", "play_animation", {id = hash("score_indicator_3")})
+		msg.post("/Air-head#bloon", "play_animation", {id = hash("Second")})
 		
 	elseif score > 2 then
 
 		msg.post("/Scoore#score", "play_animation", {id = hash("score_indicator_4")})
+		msg.post("/Air-head#bloon", "play_animation", {id = hash("Third")})
 		
 	else
 	
@@ -159,14 +162,7 @@ function Plusscore()
 		
 	end
 
-end
-
-		
-
-
-
-		
-	
+--end
 end
 
 function Setactives ()

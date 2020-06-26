@@ -224,10 +224,10 @@ embedded_instances {
 embedded_instances {
   id: "Air-head"
   data: "embedded_components {\n"
-  "  id: \"sprite\"\n"
+  "  id: \"bloon\"\n"
   "  type: \"sprite\"\n"
   "  data: \"tile_set: \\\"/assets/Air Heads.atlas\\\"\\n"
-  "default_animation: \\\"First\\\"\\n"
+  "default_animation: \\\"Airheads_Balloon_1\\\"\\n"
   "material: \\\"/builtins/materials/sprite.material\\\"\\n"
   "blend_mode: BLEND_MODE_ALPHA\\n"
   "\"\n"
@@ -246,7 +246,7 @@ embedded_instances {
   ""
   position {
     x: 0.0
-    y: 0.0
+    y: 58.0
     z: 0.3
   }
   rotation {
@@ -256,8 +256,8 @@ embedded_instances {
     w: 1.0
   }
   scale3 {
-    x: 2.361
-    y: 1.915
+    x: 3.101
+    y: 2.606
     z: 1.0
   }
 }
