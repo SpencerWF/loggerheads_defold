@@ -38,6 +38,7 @@ local goodoldpos
 local pickactive
 
 function init(self)
+
 	msg.post(".", "acquire_input_focus")
 
 	client = Colyseus.new("ws://" .. server_address .. ":" .. server_port, false) -- false: not to connect immediately
@@ -134,7 +135,7 @@ end
 
 function Plusscore()
 	-- add real score
-	--if	goodisactive == true then
+	if	goodisactive == true then
 		
 		score = score + 1
 
@@ -162,7 +163,21 @@ function Plusscore()
 		
 	end
 
---end
+end
+if badisactive == true then 
+
+	score = score - 1
+	if score < 1 then
+
+		msg.post("/Scoore#score", "play_animation", {id = hash("score_indicator_1")})
+		msg.post("/Air-head#bloon", "play_animation", {id = hash("Firstback")})
+
+	elseif score == 1 then
+		msg.post("/Scoore#score", "play_animation", {id = hash("score_indicator_2")})
+		msg.post("/Air-head#bloon", "play_animation", {id = hash("Secondback")})
+	end
+end
+
 end
 
 function Setactives ()
