@@ -37,6 +37,8 @@ local goodoldpos
 
 local pickactive
 
+local playerid = {} 
+
 function init(self)
 
 	msg.post(".", "acquire_input_focus")
@@ -67,6 +69,7 @@ function init(self)
 		room.state.players.on_add = function(player, sessionId)
 			print("new player")
 			pprint(player)
+			playerid.insert(sessionId, player)
 		end
 
 		room.state.on_change = function(changes)
@@ -99,8 +102,11 @@ end
 
 function update(self, dt)
 	client:loop()
-	--print("Curren points are")
-	--print(room.state.players[room.sessionId].points)
+	print("ID")
+	print(room.sessionId)
+	print("clients")
+	print(room.state.players)
+	--.
 	-- time = time + dt using os.clock() instead of dt
 	-- Whatsactive()
 end
@@ -144,17 +150,17 @@ function Plusscore()
 		print("Curren points are")
 		print(room.state.players[room.sessionId].points)
 
-	if room.state.players[room.sessionId].points > 0 then
+	if room.state.players[room.sessionId].points == 3 then
 
 		msg.post("/Scoore#score", "play_animation", {id = hash("score_indicator_2")})
 		msg.post("/Air-head#bloon", "play_animation", {id = hash("First")})
 		
-	elseif room.state.players[room.sessionId].points > 1 then
+	elseif room.state.players[room.sessionId].points == 6 then
 
 		msg.post("/Scoore#score", "play_animation", {id = hash("score_indicator_3")})
 		msg.post("/Air-head#bloon", "play_animation", {id = hash("Second")})
 		
-	elseif room.state.players[room.sessionId].points > 2 then
+	elseif room.state.players[room.sessionId].points > 8 then
 
 		msg.post("/Scoore#score", "play_animation", {id = hash("score_indicator_4")})
 		msg.post("/Air-head#bloon", "play_animation", {id = hash("Third")})
@@ -165,12 +171,12 @@ end
 if badisactive == true then 
 
 	--score = score - 1
-	if room.state.players[ room.sessionId ].points < 1 then
+	if room.state.players[room.sessionId ].points < 3 then
 
 		msg.post("/Scoore#score", "play_animation", {id = hash("score_indicator_1")})
 		msg.post("/Air-head#bloon", "play_animation", {id = hash("Firstback")})
 
-	elseif room.state.players[ room.sessionId ].points == 1 then
+	elseif room.state.players[ room.sessionId ].points < 6 && room.state.players[ room.sessionId ].points > 3  then
 		msg.post("/Scoore#score", "play_animation", {id = hash("score_indicator_2")})
 		msg.post("/Air-head#bloon", "play_animation", {id = hash("Secondback")})
 	end
