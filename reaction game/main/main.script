@@ -99,6 +99,8 @@ end
 
 function update(self, dt)
 	client:loop()
+	--print("Curren points are")
+	--print(room.state.players[room.sessionId].points)
 	-- time = time + dt using os.clock() instead of dt
 	-- Whatsactive()
 end
@@ -137,42 +139,38 @@ function Plusscore()
 	-- add real score
 	if	goodisactive == true then
 		
-		score = score + 1
+		--score = score + 1
 
-	
-	print(score)
+		print("Curren points are")
+		print(room.state.players[room.sessionId].points)
 
-	if score == 1 then
+	if room.state.players[room.sessionId].points > 0 then
 
 		msg.post("/Scoore#score", "play_animation", {id = hash("score_indicator_2")})
 		msg.post("/Air-head#bloon", "play_animation", {id = hash("First")})
 		
-	elseif score == 2 then
+	elseif room.state.players[room.sessionId].points > 1 then
 
 		msg.post("/Scoore#score", "play_animation", {id = hash("score_indicator_3")})
 		msg.post("/Air-head#bloon", "play_animation", {id = hash("Second")})
 		
-	elseif score > 2 then
+	elseif room.state.players[room.sessionId].points > 2 then
 
 		msg.post("/Scoore#score", "play_animation", {id = hash("score_indicator_4")})
 		msg.post("/Air-head#bloon", "play_animation", {id = hash("Third")})
-		
-	else
-	
-		msg.post("/Scoore#score", "play_animation", {id = hash("score_indicator_1")})
 		
 	end
 
 end
 if badisactive == true then 
 
-	score = score - 1
-	if score < 1 then
+	--score = score - 1
+	if room.state.players[ room.sessionId ].points < 1 then
 
 		msg.post("/Scoore#score", "play_animation", {id = hash("score_indicator_1")})
 		msg.post("/Air-head#bloon", "play_animation", {id = hash("Firstback")})
 
-	elseif score == 1 then
+	elseif room.state.players[ room.sessionId ].points == 1 then
 		msg.post("/Scoore#score", "play_animation", {id = hash("score_indicator_2")})
 		msg.post("/Air-head#bloon", "play_animation", {id = hash("Secondback")})
 	end
@@ -212,17 +210,3 @@ function Setactives ()
 	-- time = 0
 end
 
---function Setpositions()
---	if goodisactive == true then
---		go.set_position(centerposition,"good")
---		go.set_position(badoldpos,"bad")
---	else
---		go.set_position(goodoldpos,"good")
---	end
---	if badisactive == true then
---		go.set_position(centerposition,"bad")
---		go.set_position(goodoldpos,"good")
---	else
---		go.set_position(badoldpos,"bad")
---	end
---end
