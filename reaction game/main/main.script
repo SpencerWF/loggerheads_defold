@@ -27,7 +27,7 @@ local badreaction = 10
 local goodbad = 0
 local goodbad = goodbad -- What does this do?
 
-local centerposition;
+local centerposition
 
 local goodisactive = false
 local badisactive = true
@@ -37,14 +37,34 @@ local goodoldpos
 
 local pickactive
 
+local gameover = false
+local gameover_count = 0
+
+local bloon_timer = 0
+local bloon_timer_max = 25
+local bloon_image = 1
+
 local playerid = {""} 
 local it = 0
 local it = it
-function init(self)
 
+local info = sys.get_sys_info()
+local server_location
+if (info.system_name == "HTML5") then
+	-- If this is a HTML5 build use javascript code to read in the server addess details
+	server_location = html5.run("location.protocol.replace('http', 'ws') + '//' + window.document.location.host.replace(/:.*/, '') + (location.port ? ':' + location.port : '');")
+
+else
+	-- Build is not a HTML5 build. This server location assumes the server and the clients are on the same device for testing generally.
+	server_location = "ws://" .. server_address .. ":" .. server_port
+end
+	
+
+function init(self)
 	msg.post(".", "acquire_input_focus")
 
-	client = Colyseus.new("ws://" .. server_address .. ":" .. server_port, false) -- false: not to connect immediately
+	client = Colyseus.new(server_location, false) -- false: not to connect immediately
+	-- client = Colyseus.new("ws://" .. server_address .. ":" .. server_port, false) -- false: not to connect immediately
 
 	client:join_or_create("reactiongame", function(err, room_instance)
 		if (err ~= nil) then
@@ -86,6 +106,11 @@ function init(self)
 			pprint(message)
 		end)
 
+		room:on_message("win", function()
+			gameover = true;
+			gameover_count = 0;
+		end)
+
 		room:on("leave", function()
 			print("left '" .. room.name .. "'")
 		end)
@@ -104,13 +129,29 @@ end
 
 function update(self, dt)
 	client:loop()
-	--print("ID")
-	--print(room.sessionId)
-	--print("clients")
-	--print(room.state.players)
-	
-	-- time = time + dt using os.clock() instead of dt
-	-- Whatsactive()
+
+	if (gameover) then
+		gameover_count+=1
+		if (gameover_count > 99 and info.system_name == "HTML5") then
+			html5.run(window.location.href = "/lobbyroom.html";)
+		end
+	end
+
+	if (bloon_timer == 0) then
+		if (room.state.players[ room.sessionId ].points >= bloon_image+1) then
+			bloon_timer = bloon_timer_max
+			bloon_image += 1
+			go.set("/Air-head#bloon", "image", "Airheads_Baloon_"..bloon_image)
+		else if (room.state.players[ room.sessionId ].points <= bloon_image+1) then
+			bloon_timer = bloon_timer_max
+			bloon_image -= 1
+			go.set("/Air-head#bloon", "image", "Airheads_Baloon_"..bloon_image)
+		end
+	end
+		
+	if (bloon_timer > 0) then
+		bloon_timer -= 1
+	end
 end
 
 function on_input(self, action_id, action)
@@ -146,44 +187,24 @@ end
 function Plusscore()
 	-- add real score
 	if	goodisactive == true then
-		
-		--score = score + 1
-
-		print("Curren points are")
+		print("Current points are")
 		print(room.state.players[room.sessionId].points)
-
-	if room.state.players[room.sessionId].points > 2 then
-
-		
-		msg.post("/Air-head#bloon", "play_animation", {id = hash("First")})
-		
-	elseif room.state.players[room.sessionId].points > 5 then
-
-		
-		msg.post("/Air-head#bloon", "play_animation", {id = hash("Second")})
-		
-	elseif room.state.players[room.sessionId].points > 8 then
-
-		
-		msg.post("/Air-head#bloon", "play_animation", {id = hash("Third")})
-		
+		if room.state.players[room.sessionId].points > 2 then
+			msg.post("/Air-head#bloon", "play_animation", {id = hash("First")})
+		elseif room.state.players[room.sessionId].points > 5 then
+			msg.post("/Air-head#bloon", "play_animation", {id = hash("Second")})
+		elseif room.state.players[room.sessionId].points > 8 then
+			msg.post("/Air-head#bloon", "play_animation", {id = hash("Third")})
+		end
 	end
 
-end
-if badisactive == true then 
-
-	--score = score - 1
-	if room.state.players[room.sessionId ].points < 3 then
-
-		
-		msg.post("/Air-head#bloon", "play_animation", {id = hash("Firstback")})
-
-	elseif room.state.players[ room.sessionId ].points < 6 and room.state.players[ room.sessionId ].points > 3  then
-		
-		msg.post("/Air-head#bloon", "play_animation", {id = hash("Secondback")})
+	if badisactive == true then 
+		if room.state.players[room.sessionId ].points < 3 then
+			msg.post("/Air-head#bloon", "play_animation", {id = hash("Firstback")})
+		elseif room.state.players[ room.sessionId ].points < 6 and room.state.players[ room.sessionId ].points > 3  then
+			msg.post("/Air-head#bloon", "play_animation", {id = hash("Secondback")})
+		end
 	end
-end
-
 end
 
 function Setactives ()
@@ -216,152 +237,142 @@ function Setactives ()
 		Plusscore()
 		otherscores()
 	end
-
-
 end
+
 function otherscores()
-
-
 	for i = 0,3 do
+		if room.state.players[playerid[i]].points == 0 then
 
-			if room.state.players[playerid[i]].points == 0 then
+			if playerid[0] == playerid[i] then
+				msg.post("/Scoore player one#score", "play_animation", {id = hash("score_indicator_1")})
+			elseif playerid[1] == playerid[i] then
+				msg.post("/Scoore player one1#score", "play_animation", {id = hash("score_indicator_1")})
+			elseif playerid[2] == playerid[i] then
+				msg.post("/Scoore player one2#score", "play_animation", {id = hash("score_indicator_1")})
+			elseif playerid[3] == playerid[i] then
+				msg.post("/Scoore player one3#score", "play_animation", {id = hash("score_indicator_1")})
+			end
+			--Zerobothscoores() 
+		elseif room.state.players[playerid[i]].points == 1 then
 
-				if playerid[0] == playerid[i] then
-					msg.post("/Scoore player one#score", "play_animation", {id = hash("score_indicator_1")})
-				elseif playerid[1] == playerid[i] then
-					msg.post("/Scoore player one1#score", "play_animation", {id = hash("score_indicator_1")})
-				elseif playerid[2] == playerid[i] then
-					msg.post("/Scoore player one2#score", "play_animation", {id = hash("score_indicator_1")})
-				elseif playerid[3] == playerid[i] then
-					msg.post("/Scoore player one3#score", "play_animation", {id = hash("score_indicator_1")})
-				end
-				--Zerobothscoores() 
-			elseif room.state.players[playerid[i]].points == 1 then
+			if playerid[0] == playerid[i]  then
+				msg.post("/Scoore player one#score", "play_animation", {id = hash("score_indicator_2")})
+			elseif playerid[1] == playerid[i] then
+				msg.post("/Scoore player one1#score", "play_animation", {id = hash("score_indicator_2")})
+			elseif playerid[2] == playerid[i] then
+				msg.post("/Scoore player one2#score", "play_animation", {id = hash("score_indicator_2")})
+			elseif playerid[3] == playerid[i] then
+				msg.post("/Scoore player one3#score", "play_animation", {id = hash("score_indicator_2")})
+			end 
+			Zerobothscoores()
+		elseif room.state.players[playerid[i]].points == 2 then
 
-				if playerid[0] == playerid[i]  then
-					msg.post("/Scoore player one#score", "play_animation", {id = hash("score_indicator_2")})
-				elseif playerid[1] == playerid[i] then
-					msg.post("/Scoore player one1#score", "play_animation", {id = hash("score_indicator_2")})
-				elseif playerid[2] == playerid[i] then
-					msg.post("/Scoore player one2#score", "play_animation", {id = hash("score_indicator_2")})
-				elseif playerid[3] == playerid[i] then
-					msg.post("/Scoore player one3#score", "play_animation", {id = hash("score_indicator_2")})
-				end 
-				Zerobothscoores()
-			elseif room.state.players[playerid[i]].points == 2 then
+			if playerid[0] == playerid[i] then
+				msg.post("/Scoore player one#score", "play_animation", {id = hash("score_indicator_3")})
+			elseif playerid[1] == playerid[i] then
+				msg.post("/Scoore player one1#score", "play_animation", {id = hash("score_indicator_3")})
+			elseif playerid[2] == playerid[i] then
+				msg.post("/Scoore player one2#score", "play_animation", {id = hash("score_indicator_3")})
+			elseif playerid[3] == playerid[i] then
+				msg.post("/Scoore player one3#score", "play_animation", {id = hash("score_indicator_3")})
+			end
+			Zerobothscoores()
+		elseif room.state.players[playerid[i]].points == 3 then
 
-				if playerid[0] == playerid[i] then
-					msg.post("/Scoore player one#score", "play_animation", {id = hash("score_indicator_3")})
-				elseif playerid[1] == playerid[i] then
-					msg.post("/Scoore player one1#score", "play_animation", {id = hash("score_indicator_3")})
-				elseif playerid[2] == playerid[i] then
-					msg.post("/Scoore player one2#score", "play_animation", {id = hash("score_indicator_3")})
-				elseif playerid[3] == playerid[i] then
-					msg.post("/Scoore player one3#score", "play_animation", {id = hash("score_indicator_3")})
-				end
-				Zerobothscoores()
-			elseif room.state.players[playerid[i]].points == 3 then
-
-				if playerid[0] == playerid[i] then
-					msg.post("/Scoore player one#score", "play_animation", {id = hash("score_indicator_4")})
-				elseif playerid[1] == playerid[i] then
-					msg.post("/Scoore player one1#score", "play_animation", {id = hash("score_indicator_4")})
-				elseif playerid[2] == playerid[i] then
-					msg.post("/Scoore player one2#score", "play_animation", {id = hash("score_indicator_4")})
-				elseif playerid[3] == playerid[i] then
-					msg.post("/Scoore player one3#score", "play_animation", {id = hash("score_indicator_4")})
-				end
+			if playerid[0] == playerid[i] then
+				msg.post("/Scoore player one#score", "play_animation", {id = hash("score_indicator_4")})
+			elseif playerid[1] == playerid[i] then
+				msg.post("/Scoore player one1#score", "play_animation", {id = hash("score_indicator_4")})
+			elseif playerid[2] == playerid[i] then
+				msg.post("/Scoore player one2#score", "play_animation", {id = hash("score_indicator_4")})
+			elseif playerid[3] == playerid[i] then
+				msg.post("/Scoore player one3#score", "play_animation", {id = hash("score_indicator_4")})
+			end
 
 -- keep other scoores lower at zero 
 Zerobothscoores()
-	
-			elseif room.state.players[playerid[i]].points == 4 then
 
-				if playerid[0] == playerid[i] then
-					msg.post("/Scoore player one#score1", "play_animation", {id = hash("score_indicator_2")})
-				elseif playerid[1] == playerid[i] then
-					msg.post("/Scoore player one1#score1", "play_animation", {id = hash("score_indicator_2")})
-				elseif playerid[2] == playerid[i] then
-					msg.post("/Scoore player one2#score1", "play_animation", {id = hash("score_indicator_2")})
-				elseif playerid[3] == playerid[i] then
-					msg.post("/Scoore player one3#score1", "play_animation", {id = hash("score_indicator_2")})
-				end
+		elseif room.state.players[playerid[i]].points == 4 then
 
-				Onezero()
-				
-			elseif room.state.players[playerid[i]].points == 5 then
+			if playerid[0] == playerid[i] then
+				msg.post("/Scoore player one#score1", "play_animation", {id = hash("score_indicator_2")})
+			elseif playerid[1] == playerid[i] then
+				msg.post("/Scoore player one1#score1", "play_animation", {id = hash("score_indicator_2")})
+			elseif playerid[2] == playerid[i] then
+				msg.post("/Scoore player one2#score1", "play_animation", {id = hash("score_indicator_2")})
+			elseif playerid[3] == playerid[i] then
+				msg.post("/Scoore player one3#score1", "play_animation", {id = hash("score_indicator_2")})
+			end
 
-				if playerid[0] == playerid[i] then
-					msg.post("/Scoore player one#score1", "play_animation", {id = hash("score_indicator_3")})
-				elseif playerid[1] == playerid[i] then
-					msg.post("/Scoore player one1#score1", "play_animation", {id = hash("score_indicator_3")})
-				elseif playerid[2] == playerid[i] then
-					msg.post("/Scoore player one2#score1", "play_animation", {id = hash("score_indicator_3")})
-				elseif playerid[3] == playerid[i] then
-					msg.post("/Scoore player one3#score1", "play_animation", {id = hash("score_indicator_3")})
-				end
+			Onezero()
+			
+		elseif room.state.players[playerid[i]].points == 5 then
 
-				Onezero()
-				
-			elseif room.state.players[playerid[i]].points == 6 then
+			if playerid[0] == playerid[i] then
+				msg.post("/Scoore player one#score1", "play_animation", {id = hash("score_indicator_3")})
+			elseif playerid[1] == playerid[i] then
+				msg.post("/Scoore player one1#score1", "play_animation", {id = hash("score_indicator_3")})
+			elseif playerid[2] == playerid[i] then
+				msg.post("/Scoore player one2#score1", "play_animation", {id = hash("score_indicator_3")})
+			elseif playerid[3] == playerid[i] then
+				msg.post("/Scoore player one3#score1", "play_animation", {id = hash("score_indicator_3")})
+			end
 
-				if playerid[0] == playerid[i] then
-					msg.post("/Scoore player one#score1", "play_animation", {id = hash("score_indicator_4")})
-				elseif playerid[1] == playerid[i] then
-					msg.post("/Scoore player one1#score1", "play_animation", {id = hash("score_indicator_4")})
-				elseif playerid[2] == playerid[i] then
-					msg.post("/Scoore player one2#score1", "play_animation", {id = hash("score_indicator_4")})
-				elseif playerid[3] == playerid[i] then
-					msg.post("/Scoore player one3#score1", "play_animation", {id = hash("score_indicator_4")})
-				end
+			Onezero()
+			
+		elseif room.state.players[playerid[i]].points == 6 then
 
-				Onezero()
+			if playerid[0] == playerid[i] then
+				msg.post("/Scoore player one#score1", "play_animation", {id = hash("score_indicator_4")})
+			elseif playerid[1] == playerid[i] then
+				msg.post("/Scoore player one1#score1", "play_animation", {id = hash("score_indicator_4")})
+			elseif playerid[2] == playerid[i] then
+				msg.post("/Scoore player one2#score1", "play_animation", {id = hash("score_indicator_4")})
+			elseif playerid[3] == playerid[i] then
+				msg.post("/Scoore player one3#score1", "play_animation", {id = hash("score_indicator_4")})
+			end
 
-				
-			elseif room.state.players[playerid[i]].points == 7 then
+			Onezero()
 
-				if playerid[0] == playerid[i] then
-					msg.post("/Scoore player one#score2", "play_animation", {id = hash("score_indicator_2")})
-				elseif playerid[1] == playerid[i] then
-					msg.post("/Scoore player one1#score2", "play_animation", {id = hash("score_indicator_2")})
-				elseif playerid[2] == playerid[i] then
-					msg.post("/Scoore player one2#score2", "play_animation", {id = hash("score_indicator_2")})
-				elseif playerid[3] == playerid[i] then
-					msg.post("/Scoore player one3#score2", "play_animation", {id = hash("score_indicator_2")})
-				end
+			
+		elseif room.state.players[playerid[i]].points == 7 then
 
-				
-			elseif room.state.players[playerid[i]].points == 8 then
+			if playerid[0] == playerid[i] then
+				msg.post("/Scoore player one#score2", "play_animation", {id = hash("score_indicator_2")})
+			elseif playerid[1] == playerid[i] then
+				msg.post("/Scoore player one1#score2", "play_animation", {id = hash("score_indicator_2")})
+			elseif playerid[2] == playerid[i] then
+				msg.post("/Scoore player one2#score2", "play_animation", {id = hash("score_indicator_2")})
+			elseif playerid[3] == playerid[i] then
+				msg.post("/Scoore player one3#score2", "play_animation", {id = hash("score_indicator_2")})
+			end
 
-				if playerid[0] == playerid[i] then
-					msg.post("/Scoore player one#score2", "play_animation", {id = hash("score_indicator_3")})
-				elseif playerid[1] == playerid[i] then
-					msg.post("/Scoore player one1#score2", "play_animation", {id = hash("score_indicator_3")})
-				elseif playerid[2] == playerid[i] then
-					msg.post("/Scoore player one2#score2", "play_animation", {id = hash("score_indicator_3")})
-				elseif playerid[3] == playerid[i] then
-					msg.post("/Scoore player one3#score2", "play_animation", {id = hash("score_indicator_3")})
-				end
-				
-			elseif room.state.players[playerid[i]].points == 9 then
+			
+		elseif room.state.players[playerid[i]].points == 8 then
 
-				if playerid[0] == playerid[i] then
-					msg.post("/Scoore player one#score2", "play_animation", {id = hash("score_indicator_4")})
-				elseif playerid[1] == playerid[i] then
-					msg.post("/Scoore player one1#score2", "play_animation", {id = hash("score_indicator_4")})
-				elseif playerid[2] == playerid[i] then
-					msg.post("/Scoore player one2#score2", "play_animation", {id = hash("score_indicator_4")})
-				elseif playerid[3] == playerid[i] then
-					msg.post("/Scoore player one3#score2", "play_animation", {id = hash("score_indicator_4")})
-				end
-				
-				
+			if playerid[0] == playerid[i] then
+				msg.post("/Scoore player one#score2", "play_animation", {id = hash("score_indicator_3")})
+			elseif playerid[1] == playerid[i] then
+				msg.post("/Scoore player one1#score2", "play_animation", {id = hash("score_indicator_3")})
+			elseif playerid[2] == playerid[i] then
+				msg.post("/Scoore player one2#score2", "play_animation", {id = hash("score_indicator_3")})
+			elseif playerid[3] == playerid[i] then
+				msg.post("/Scoore player one3#score2", "play_animation", {id = hash("score_indicator_3")})
+			end
+			
+		elseif room.state.players[playerid[i]].points == 9 then
+
+			if playerid[0] == playerid[i] then
+				msg.post("/Scoore player one#score2", "play_animation", {id = hash("score_indicator_4")})
+			elseif playerid[1] == playerid[i] then
+				msg.post("/Scoore player one1#score2", "play_animation", {id = hash("score_indicator_4")})
+			elseif playerid[2] == playerid[i] then
+				msg.post("/Scoore player one2#score2", "play_animation", {id = hash("score_indicator_4")})
+			elseif playerid[3] == playerid[i] then
+				msg.post("/Scoore player one3#score2", "play_animation", {id = hash("score_indicator_4")})
+			end
 		end
 	end
-
-
-	
-
 end
 function Zerobothscoores()
 
