@@ -131,26 +131,26 @@ function update(self, dt)
 	client:loop()
 
 	if (gameover) then
-		gameover_count+=1
+		gameover_count = gameover_count + 1
 		if (gameover_count > 99 and info.system_name == "HTML5") then
-			html5.run(window.location.href = "/lobbyroom.html";)
+			html5.run('window.location.href = "/lobbyroom.html";')
 		end
 	end
 
 	if (bloon_timer == 0) then
 		if (room.state.players[ room.sessionId ].points >= bloon_image+1) then
 			bloon_timer = bloon_timer_max
-			bloon_image += 1
+			bloon_image = bloon_image+1
 			go.set("/Air-head#bloon", "image", "Airheads_Baloon_"..bloon_image)
 		else if (room.state.players[ room.sessionId ].points <= bloon_image+1) then
 			bloon_timer = bloon_timer_max
-			bloon_image -= 1
+			bloon_image = bloon_image - 1
 			go.set("/Air-head#bloon", "image", "Airheads_Baloon_"..bloon_image)
 		end
 	end
 		
 	if (bloon_timer > 0) then
-		bloon_timer -= 1
+		bloon_timer = bloon_image - 1
 	end
 end
 
@@ -234,7 +234,7 @@ function Setactives ()
 		msg.post("/wait#Wait", "enable")
 		msg.post("/good#Good", "disable")
 		msg.post("/bad#Bad", "disable")
-		Plusscore()
+		-- Plusscore()
 		otherscores()
 	end
 end
@@ -409,5 +409,5 @@ function Zerobothscoores()
 		else
 			msg.post("/Scoore player one3#score2", "play_animation", {id = hash("score_indicator_1")})
 		end
-
 	end
+end
