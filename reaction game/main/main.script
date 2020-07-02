@@ -78,7 +78,7 @@ function init(self)
 			print("state changes")
 			pickactive = room.state.mode
 			Setactives()
-			Setpositions()
+			-- Setpositions()
 		end
 
 		room:on_message("data", function(message)
@@ -104,13 +104,6 @@ end
 
 function update(self, dt)
 	client:loop()
-	--print("ID")
-	--print(room.sessionId)
-	--print("clients")
-	--print(room.state.players)
-	
-	-- time = time + dt using os.clock() instead of dt
-	-- Whatsactive()
 end
 
 function on_input(self, action_id, action)
