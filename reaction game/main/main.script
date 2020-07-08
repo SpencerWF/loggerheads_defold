@@ -136,6 +136,7 @@ function update(self, dt)
 				html5.run('window.location.href = "/lobbyroom.html";')
 			else
 				msg.post("@system:", "exit", {code = 0})
+			end
 		end
 	end
 
