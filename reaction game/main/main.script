@@ -91,6 +91,7 @@ function init(self)
 			pprint(player)
 			playerid[it] = sessionId
 			it = it + 1
+			
 		end
 
 		room.state.on_change = function(changes)

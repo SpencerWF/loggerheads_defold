@@ -66,7 +66,7 @@ animations {
   flip_vertical: 0
 }
 animations {
-  id: "scoreing"
+  id: "scoreingblue"
   images {
     image: "/assets/Airheads assets/score_indicator_1.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
@@ -81,6 +81,75 @@ animations {
   }
   images {
     image: "/assets/Airheads assets/score_indicator_4.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  playback: PLAYBACK_NONE
+  fps: 2
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "scoreingyellow"
+  images {
+    image: "/assets/Airheads assets/score_indicator_1.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/Airheads assets/score_indicator_2_this.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/Airheads assets/score_indicator_3_this.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/Airheads assets/score_indicator_4_this.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  playback: PLAYBACK_NONE
+  fps: 2
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "scoreinggreen"
+  images {
+    image: "/assets/Airheads assets/score_indicator_1.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/Airheads assets/score_indicator_2_green.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/Airheads assets/score_indicator_3_green.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/Airheads assets/score_indicator_4_green.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  playback: PLAYBACK_NONE
+  fps: 2
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "scoreingred"
+  images {
+    image: "/assets/Airheads assets/score_indicator_1.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/Airheads assets/score_indicator_2_red.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/Airheads assets/score_indicator_3_red.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/Airheads assets/score_indicator_4_red.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   playback: PLAYBACK_NONE
