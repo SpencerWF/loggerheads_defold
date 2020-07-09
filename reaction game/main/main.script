@@ -90,7 +90,18 @@ function init(self)
 			print("new player")
 			pprint(player)
 			playerid[it] = sessionId
+
+			if playerid[0] == sessionId then
+				msg.post("/Air-head#bloon", "play_animation", {id = hash("full_baloon_green")})
+			elseif playerid[1] == sessionId then
+				msg.post("/Air-head#bloon", "play_animation", {id = hash("full_baloon_blue")})
+			elseif playerid[2] == sessionId then
+				msg.post("/Air-head#bloon", "play_animation", {id = hash("full_baloon_red")})
+			elseif playerid[3] == sessionId then
+				msg.post("/Air-head#bloon", "play_animation", {id = hash("full_baloon_yellow")})
+			end	
 			it = it + 1
+			
 			
 		end
 
