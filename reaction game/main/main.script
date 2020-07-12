@@ -39,10 +39,10 @@ local pickactive
 
 local gameover = false
 local gameover_count = 0
-local gameover_end = 2000
+local gameover_end = 1000
 
 local bloon_timer = 0
-local bloon_timer_max = 35
+local bloon_timer_max = 10
 local bloon_image = 1
 
 local playerid = {""} 
@@ -54,6 +54,7 @@ local server_location
 if (info.system_name == "HTML5") then
 	-- If this is a HTML5 build use javascript code to read in the server addess details
 	server_location = html5.run("location.protocol.replace('http', 'ws') + '//' + window.document.location.host.replace(/:.*/, '') + (location.port ? ':' + location.port : '');")
+	window.set_dim_mode(window.DIMMING_OFF)
 else
 	-- Build is not a HTML5 build. This server location assumes the server and the clients are on the same device for testing generally.
 	server_location = "ws://" .. server_address .. ":" .. server_port

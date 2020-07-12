@@ -12,6 +12,7 @@ use_accelerometer = 0
 [display]
 width = 640
 height = 1136
+fullscreen = 1
 
 [ios]
 app_icon_120x120 = /assets/app_icons/icon_120.png
@@ -66,4 +67,16 @@ shared_state = 1
 [physics]
 gravity_y = -1000.0
 scale = 0.01
+
+[engine]
+run_while_iconified = 1
+
+[resource]
+http_cache = 1
+
+[html5]
+show_fullscreen_button = 0
+show_made_with_defold = 0
+heap_size = 512
+cssfile = /builtins/manifests/web/dark_theme.css
 
