@@ -163,6 +163,9 @@ function update(self, dt)
 	if bloon_timer > 0 then
 		bloon_timer = bloon_timer-1
 	end
+
+
+	otherscores()
 end
 
 function on_input(self, action_id, action)
@@ -226,7 +229,7 @@ function Setactives ()
 		msg.post("/good#Good", "disable")
 		msg.post("/bad#Bad", "disable")
 		-- Plusscore()
-		otherscores()
+		--otherscores()
 	end
 	-- otherscores()
 end
