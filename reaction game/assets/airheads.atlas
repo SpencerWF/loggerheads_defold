@@ -18,6 +18,10 @@ images {
   image: "/assets/Airheads assets/Airheads_Wait_Text_Large.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
+images {
+  image: "/assets/Airheads assets/Airheads_Background_4.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
 animations {
   id: "full_baloon_green"
   images {
