@@ -170,7 +170,7 @@ embedded_instances {
   "  id: \"background\"\n"
   "  type: \"sprite\"\n"
   "  data: \"tile_set: \\\"/assets/airheads.atlas\\\"\\n"
-  "default_animation: \\\"Airheads_Background_4\\\"\\n"
+  "default_animation: \\\"Airheads_Background_5\\\"\\n"
   "material: \\\"/builtins/materials/sprite.material\\\"\\n"
   "blend_mode: BLEND_MODE_ALPHA\\n"
   "\"\n"
@@ -229,7 +229,7 @@ embedded_instances {
   ""
   position {
     x: 0.0
-    y: 37.0
+    y: 33.0
     z: 0.3
   }
   rotation {
