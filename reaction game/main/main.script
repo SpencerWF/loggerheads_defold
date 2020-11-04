@@ -131,6 +131,8 @@ function init(self)
 	msg.post("/bad#Bad", "disable")
 	msg.post("/good#Good", "disable")
 	msg.post("/wait#Wait", "disable")
+
+	sound.play("/go#background",{delay = 1, gain = 0.2, pan = 0, speed = 1})
 	
 end
 
@@ -154,10 +156,12 @@ function update(self, dt)
 			bloon_timer = bloon_timer_max
 			bloon_image = bloon_image+1
 			go.set("/Air-head#bloon", "cursor", bloon_image/9)
+			sound.play("/go#pump",{delay = 1, gain = 0.2, pan = 0, speed = 1})
 		elseif (room.state.players[ room.sessionId ].points < bloon_image) then
 			bloon_timer = bloon_timer_max
 			bloon_image = bloon_image - 1
 			go.set("/Air-head#bloon", "cursor", bloon_image/9)
+			sound.play("/go#deflate",{delay = 1, gain = 0.2, pan = 0, speed = 1})
 		end
 	end
 	if bloon_timer > 0 then
@@ -209,6 +213,8 @@ function Setactives ()
 		msg.post("/wait#Wait", "disable")
 		msg.post("/bad#Bad", "disable")
 		time_os = os.clock()
+		sound.play("/go#good",{delay = 1, gain = 1, pan = 0, speed = 1})
+		sound.stop("/go#bad")
 	end
 
 	if pickactive == 2 then
@@ -218,7 +224,8 @@ function Setactives ()
 		msg.post("/bad#Bad", "enable")
 		msg.post("/wait#Wait", "disable")
 		msg.post("/good#Good", "disable")
-		-- otherscores()
+		sound.play("/go#bad",{delay = 1, gain = 1, pan = 0, speed = 1})
+		sound.stop("/go#good")
 	end
 
 	if pickactive == 0 then
@@ -228,10 +235,10 @@ function Setactives ()
 		msg.post("/wait#Wait", "enable")
 		msg.post("/good#Good", "disable")
 		msg.post("/bad#Bad", "disable")
-		-- Plusscore()
-		--otherscores()
+		sound.play("/go#good",{delay = 1, gain = 1, pan = 0, speed = 1})
+		sound.stop("/go#bad")
 	end
-	-- otherscores()
+	
 end
 
 function otherscores()
